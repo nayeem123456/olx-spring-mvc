@@ -1,0 +1,184 @@
+# 📋 Software & Extension Requirements
+## OLX Spring MVC JSP Project
+
+---
+
+## ✅ Required Software (Must Install)
+
+### 1. 🟠 Java Development Kit (JDK) 17
+| Detail | Value |
+|--------|-------|
+| **Version** | JDK 17 (LTS) |
+| **Download** | [Adoptium Temurin 17](https://adoptium.net/temurin/releases/?version=17) |
+| **Why** | Project `pom.xml` sets `maven.compiler.source = 17` |
+| **Verify** | `java -version` → should show `17.x.x` |
+
+> [!IMPORTANT]
+> You MUST use JDK 17 specifically. JDK 8 or JDK 21 will cause compilation errors with Spring 6 and Hibernate 6.
+
+---
+
+### 2. 🟢 Apache Maven 3.8+
+| Detail | Value |
+|--------|-------|
+| **Version** | Maven 3.8.x or 3.9.x |
+| **Download** | [maven.apache.org](https://maven.apache.org/download.cgi) |
+| **Why** | Manages all project dependencies from `pom.xml` |
+| **Bundled?** | ✅ Yes — project has `apache-maven-3.9.6` bundled in root folder |
+| **Verify** | `mvn -v` → should show `Apache Maven 3.9.x` |
+
+> [!NOTE]
+> The project already includes Maven 3.9.6 in the `apache-maven-3.9.6/` folder. You can use it directly without installing globally.
+
+---
+
+### 3. 🔵 MySQL Database Server 8.x
+| Detail | Value |
+|--------|-------|
+| **Version** | MySQL 8.0 or 8.4 |
+| **Download** | [MySQL Community Server](https://dev.mysql.com/downloads/mysql/) |
+| **Why** | App uses `mysql-connector-j 8.4.0`; DB is `mvc_olx` on port `3306` |
+| **Config File** | `src/main/resources/META-INF/persistence.xml` |
+| **Verify** | `mysql --version` |
+
+> [!CAUTION]
+> MySQL must be running on `localhost:3306` with a user that has `CREATE`, `ALTER`, and `INSERT` permissions on the `mvc_olx` database.
+
+---
+
+### 4. 🔴 Apache Tomcat 10.1.x
+| Detail | Value |
+|--------|-------|
+| **Version** | Tomcat 10.1.x |
+| **Download** | [tomcat.apache.org](https://tomcat.apache.org/download-10.cgi) |
+| **Why** | Project uses `cargo-maven3-plugin` targeting `tomcat10x` on port `8081` |
+| **WAR Deploy Path** | `target/mvc_olx.war` |
+| **Auto-Downloaded?** | ✅ Yes — Cargo plugin auto-downloads `apache-tomcat-10.1.19` on first `mvn cargo:run` |
+
+> [!NOTE]
+> Tomcat is automatically downloaded by the Cargo Maven plugin when you run `mvn cargo:run`. No manual installation needed unless using Eclipse/IntelliJ server integration.
+
+---
+
+### 5. 💻 IDE — Eclipse IDE for Enterprise Java
+| Detail | Value |
+|--------|-------|
+| **Recommended** | Eclipse IDE for Enterprise Java and Web Developers |
+| **Download** | [eclipse.org/downloads](https://www.eclipse.org/downloads/) |
+| **Why** | Project has `.classpath` and `.project` files — it's an Eclipse project |
+| **Alternative** | IntelliJ IDEA (Ultimate or Community) also works |
+
+---
+
+### 6. 🐬 MySQL Workbench (Optional but Recommended)
+| Detail | Value |
+|--------|-------|
+| **Version** | Any recent version |
+| **Download** | [MySQL Workbench](https://dev.mysql.com/downloads/workbench/) |
+| **Why** | GUI tool to manage MySQL, create databases, and verify data |
+
+---
+
+## 🧩 Required IDE Extensions / Plugins
+
+### For Eclipse IDE
+| Extension | Purpose | Install From |
+|-----------|---------|--------------|
+| **Spring Tools 4 (STS4)** | Spring MVC support, auto-wiring, Spring config editor | Eclipse Marketplace (`Help → Eclipse Marketplace → search "Spring Tools"`) |
+| **m2e (Maven Integration for Eclipse)** | Maven project support (usually bundled) | Eclipse Marketplace |
+| **Eclipse WTP (Web Tools Platform)** | JSP editor, Web project support, Tomcat integration | Usually bundled in "Enterprise Java" edition |
+| **Tomcat Plugin (WTP)** | Run/debug on Tomcat inside Eclipse | Bundled with WTP |
+| **Lombok** | Required for `@Data`, `@Getter`, `@Setter` annotations used in model classes | [projectlombok.org/setup/eclipse](https://projectlombok.org/setup/eclipse) — run `lombok.jar` installer |
+
+> [!IMPORTANT]
+> **Lombok MUST be installed separately** in Eclipse. Download `lombok.jar` and run it as a Java program (`java -jar lombok.jar`). It patches the Eclipse executable automatically.
+
+---
+
+### For IntelliJ IDEA (Alternative)
+| Extension | Purpose | Install From |
+|-----------|---------|--------------|
+| **Spring MVC Plugin** | Spring framework support | Bundled in Ultimate Edition |
+| **Lombok Plugin** | Annotation processing | `Settings → Plugins → search "Lombok"` |
+| **Jakarta EE** | Servlet / JSP support | Bundled in Ultimate Edition |
+| **Database Tools** | MySQL connection UI | Bundled in Ultimate Edition |
+
+---
+
+### For VS Code (If Used as Editor Only)
+| Extension | Purpose |
+|-----------|---------|
+| **Extension Pack for Java** | Java language support |
+| **Spring Boot Extension Pack** | Spring support |
+| **XML** by Red Hat | Edit `pom.xml`, `persistence.xml`, `web.xml` |
+| **MySQL** by MySQL (Weijan Chen) | Database viewer |
+
+---
+
+## 📦 Maven Dependencies (Auto-Downloaded)
+
+These are managed by Maven — **no manual download needed**:
+
+| Dependency | Version | Purpose |
+|------------|---------|---------|
+| `spring-webmvc` | 6.1.13 | Spring MVC framework |
+| `spring-context` | 6.1.13 | Spring IoC container |
+| `hibernate-core` | 6.5.2.Final | ORM for database operations |
+| `mysql-connector-j` | 8.4.0 | MySQL JDBC driver |
+| `jakarta.servlet-api` | 6.0.0 | Servlet API (provided by Tomcat) |
+| `jakarta.servlet.jsp.jstl` | 3.0.1 | JSTL tags for JSP pages |
+| `lombok` | 1.18.26 | Boilerplate code reduction |
+| `commons-codec` | 1.15 | MD5/SHA password hashing |
+| `junit` | 4.11 | Unit testing |
+
+---
+
+## 🗂️ Summary Checklist
+
+```
+[ ] JDK 17 installed and JAVA_HOME set
+[ ] Maven 3.9+ installed (or use bundled apache-maven-3.9.6/)
+[ ] MySQL 8.x installed and running on port 3306
+[ ] Database 'mvc_olx' created in MySQL
+[ ] MySQL credentials configured in persistence.xml
+[ ] Eclipse IDE (Enterprise Java edition) or IntelliJ IDEA installed
+[ ] Lombok plugin installed in your IDE
+[ ] Spring Tools 4 installed (Eclipse only)
+[ ] Maven Integration (m2e) installed (Eclipse only)
+[ ] Tomcat 10.1.x configured in IDE (auto-handled by Cargo plugin)
+```
+
+---
+
+## ⚡ Quick Start Commands
+
+```powershell
+# 1. Verify Java
+java -version       # Must show: openjdk 17.x.x
+
+# 2. Verify Maven
+mvn -version        # Must show: Apache Maven 3.9.x
+
+# 3. Verify MySQL
+mysql -u root -p    # Must connect to MySQL 8.x
+
+# 4. Build the project
+cd d:\olx-spring-mvc-jsp-main
+mvn clean package
+
+# 5. Run with embedded Tomcat (auto-downloads Tomcat 10.1.19)
+mvn cargo:run
+
+# 6. Open in browser
+# http://localhost:8081/mvc_olx/
+```
+
+-------------------------------------------------------
+
+to run the project 
+
+powershell -ExecutionPolicy Bypass -File .\run.ps1
+
+mvn clean package cargo:run
+
+http://localhost:8081/mvc_olx/

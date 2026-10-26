@@ -1,0 +1,3 @@
+<%-- Anti-FOUC: runs before CSS is applied to prevent flash of wrong theme --%>
+<script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('olx-theme')||'dark');}catch(e){}</script>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/css/styles.css">

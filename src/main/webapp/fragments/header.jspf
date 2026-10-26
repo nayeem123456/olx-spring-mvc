@@ -1,0 +1,73 @@
+<%@page import="mvc_olx.dto.Customer"%>
+<%@page import="mvc_olx.helper.CurrencyFormatter"%>
+<%
+    Customer navCustomer = (Customer) session.getAttribute("customer");
+    // Detect active page for nav highlighting
+    String currentUri = request.getRequestURI();
+    boolean isHome     = currentUri.endsWith("/home") || currentUri.endsWith("Home.jsp") || currentUri.endsWith("mvc_olx/") || currentUri.endsWith("mvc_olx");
+    boolean isBuy      = currentUri.contains("displayproducts");
+    boolean isSell     = currentUri.contains("AddProduct");
+    boolean isListings = currentUri.contains("mylistings");
+    boolean isSales    = currentUri.contains("saleshistory");
+    boolean isWallet   = currentUri.contains("wallet") || currentUri.contains("AddMoney");
+%>
+<%-- Theme toggle script – runs before nav paints --%>
+<script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('olx-theme')||'dark');}catch(e){}</script>
+<nav class="nav" id="mainNav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+        <a class="nav-brand" href="home" aria-label="OLX Home">OLX</a>
+
+        <%-- Mobile hamburger --%>
+        <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu" aria-expanded="false">☰</button>
+
+        <div class="nav-links" id="navLinks">
+            <a class="nav-link <%= isBuy ? "active" : "" %>" href="displayproducts">🛒 Buy</a>
+            <% if (navCustomer != null) { %>
+                <a class="nav-link <%= isSell ? "active" : "" %>" href="AddProduct.jsp">+ Sell</a>
+                <a class="nav-link <%= isListings ? "active" : "" %>" href="mylistings">📦 My Listings</a>
+                <a class="nav-link <%= isSales ? "active" : "" %>" href="saleshistory">🤝 Sales</a>
+                <a class="nav-link <%= isWallet ? "active" : "" %>" href="wallet">💳 Wallet</a>
+                <a class="nav-link" href="logout">Logout</a>
+                <span class="nav-badge">
+                    💰 <%= CurrencyFormatter.format(navCustomer.getWallet()) %>
+                </span>
+            <% } else { %>
+                <a class="nav-link" href="Login.jsp">Login</a>
+                <a class="nav-link" href="Signup.jsp">Sign Up</a>
+            <% } %>
+            <%-- Theme toggle --%>
+            <button class="theme-toggle" id="themeToggleBtn" onclick="OLXTheme.toggle()" aria-label="Toggle theme">
+                ☀️ Light
+            </button>
+        </div>
+    </div>
+</nav>
+
+<script src="<%=request.getContextPath()%>/js/theme.js"></script>
+<script>
+    (function () {
+        // Nav scroll shadow
+        var nav = document.getElementById('mainNav');
+        window.addEventListener('scroll', function () {
+            nav && nav.classList.toggle('scrolled', window.scrollY > 20);
+        }, { passive: true });
+
+        // Mobile hamburger toggle
+        var hamburger = document.getElementById('navHamburger');
+        var navLinks  = document.getElementById('navLinks');
+        if (hamburger && navLinks) {
+            hamburger.addEventListener('click', function () {
+                var open = navLinks.classList.toggle('open');
+                hamburger.textContent = open ? '✕' : '☰';
+                hamburger.setAttribute('aria-expanded', open);
+            });
+            // Close on link click
+            navLinks.querySelectorAll('.nav-link').forEach(function (link) {
+                link.addEventListener('click', function () {
+                    navLinks.classList.remove('open');
+                    hamburger.textContent = '☰';
+                });
+            });
+        }
+    })();
+</script>
